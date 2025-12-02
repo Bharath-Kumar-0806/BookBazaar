@@ -56,7 +56,6 @@ namespace BookBazaar.Controllers
 
             var authProperties = new AuthenticationProperties
             {
-                
                 IsPersistent = model.RememberMe, 
                 ExpiresUtc = model.RememberMe
                     ? DateTime.UtcNow.AddDays(7) 
@@ -76,7 +75,6 @@ namespace BookBazaar.Controllers
             else
             {
                 return RedirectToAction("Index", "Home");
-
             }
         }
 
@@ -104,7 +102,6 @@ namespace BookBazaar.Controllers
                 Username = model.Username,
                 Email = model.Email,
                 Password = model.Password
-               
             };
             var response = await _apiHelper.ApiCall<RegisterDTO>("auth/register", registerRequest);
 
@@ -134,7 +131,6 @@ namespace BookBazaar.Controllers
         [HttpGet]
         public  IActionResult UserSettings()
         {
-
             return View();
         }
 
@@ -180,8 +176,8 @@ namespace BookBazaar.Controllers
                 return RedirectToAction("UserSettings");
             }
             return View("UserSettings");
-
         }
+
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> UpdateUserPassword(UpdateUserPasswordVM obj)
@@ -211,8 +207,8 @@ namespace BookBazaar.Controllers
             }
 
             return Json(new { success = true, message = "Password updated successfully!" });
-
         }
+
         [Authorize]
         public async Task<IActionResult> Logout()
         {
