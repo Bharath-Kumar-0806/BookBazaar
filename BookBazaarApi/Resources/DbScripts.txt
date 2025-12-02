@@ -1,6 +1,5 @@
-create database [BookBazaarDb]
-
-//
+Create database BookBazaarDb;
+GO
 USE [BookBazaarDb]
 GO
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CartItem]') AND type in (N'U'))
@@ -57,62 +56,62 @@ GO
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Cart]') AND type in (N'U'))
 ALTER TABLE [dbo].[Cart] DROP CONSTRAINT IF EXISTS [DF__Cart__CreatedAt__02FC7413]
 GO
-/****** Object:  Index [UQ__Users__A9D105347F3AF854]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Index [UQ__Users__A9D105347F3AF854]    Script Date: 02-12-2025 18:21:40 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Users]') AND type in (N'U'))
 ALTER TABLE [dbo].[Users] DROP CONSTRAINT IF EXISTS [UQ__Users__A9D105347F3AF854]
 GO
-/****** Object:  Index [UQ__Users__536C85E4E8ECAF09]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Index [UQ__Users__536C85E4E8ECAF09]    Script Date: 02-12-2025 18:21:40 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Users]') AND type in (N'U'))
 ALTER TABLE [dbo].[Users] DROP CONSTRAINT IF EXISTS [UQ__Users__536C85E4E8ECAF09]
 GO
-/****** Object:  Index [UQ__Roles__737584F69F1BCF15]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Index [UQ__Roles__737584F69F1BCF15]    Script Date: 02-12-2025 18:21:40 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Roles]') AND type in (N'U'))
 ALTER TABLE [dbo].[Roles] DROP CONSTRAINT IF EXISTS [UQ__Roles__737584F69F1BCF15]
 GO
-/****** Object:  Index [UQ__Books__447D36EAF5009A4E]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Index [UQ__Books__447D36EAF5009A4E]    Script Date: 02-12-2025 18:21:40 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Books]') AND type in (N'U'))
 ALTER TABLE [dbo].[Books] DROP CONSTRAINT IF EXISTS [UQ__Books__447D36EAF5009A4E]
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 02-12-2025 18:21:40 ******/
 DROP TABLE IF EXISTS [dbo].[Users]
 GO
-/****** Object:  Table [dbo].[UserRoles]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[UserRoles]    Script Date: 02-12-2025 18:21:40 ******/
 DROP TABLE IF EXISTS [dbo].[UserRoles]
 GO
-/****** Object:  Table [dbo].[Roles]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[Roles]    Script Date: 02-12-2025 18:21:40 ******/
 DROP TABLE IF EXISTS [dbo].[Roles]
 GO
-/****** Object:  Table [dbo].[PaymentType]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[PaymentType]    Script Date: 02-12-2025 18:21:40 ******/
 DROP TABLE IF EXISTS [dbo].[PaymentType]
 GO
-/****** Object:  Table [dbo].[Orders]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[Orders]    Script Date: 02-12-2025 18:21:40 ******/
 DROP TABLE IF EXISTS [dbo].[Orders]
 GO
-/****** Object:  Table [dbo].[OrderItems]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[OrderItems]    Script Date: 02-12-2025 18:21:40 ******/
 DROP TABLE IF EXISTS [dbo].[OrderItems]
 GO
-/****** Object:  Table [dbo].[FavoriteBooks]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[FavoriteBooks]    Script Date: 02-12-2025 18:21:40 ******/
 DROP TABLE IF EXISTS [dbo].[FavoriteBooks]
 GO
-/****** Object:  Table [dbo].[DeliveryStatus]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[DeliveryStatus]    Script Date: 02-12-2025 18:21:40 ******/
 DROP TABLE IF EXISTS [dbo].[DeliveryStatus]
 GO
-/****** Object:  Table [dbo].[Categories]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[Categories]    Script Date: 02-12-2025 18:21:40 ******/
 DROP TABLE IF EXISTS [dbo].[Categories]
 GO
-/****** Object:  Table [dbo].[CartItem]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[CartItem]    Script Date: 02-12-2025 18:21:40 ******/
 DROP TABLE IF EXISTS [dbo].[CartItem]
 GO
-/****** Object:  Table [dbo].[Cart]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[Cart]    Script Date: 02-12-2025 18:21:40 ******/
 DROP TABLE IF EXISTS [dbo].[Cart]
 GO
-/****** Object:  Table [dbo].[Books]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[Books]    Script Date: 02-12-2025 18:21:40 ******/
 DROP TABLE IF EXISTS [dbo].[Books]
 GO
-/****** Object:  Table [dbo].[Address]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[Address]    Script Date: 02-12-2025 18:21:40 ******/
 DROP TABLE IF EXISTS [dbo].[Address]
 GO
-/****** Object:  Table [dbo].[Address]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[Address]    Script Date: 02-12-2025 18:21:40 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -134,7 +133,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Books]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[Books]    Script Date: 02-12-2025 18:21:40 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -155,7 +154,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Cart]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[Cart]    Script Date: 02-12-2025 18:21:40 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -171,7 +170,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[CartItem]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[CartItem]    Script Date: 02-12-2025 18:21:40 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -189,7 +188,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Categories]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[Categories]    Script Date: 02-12-2025 18:21:40 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -203,7 +202,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[DeliveryStatus]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[DeliveryStatus]    Script Date: 02-12-2025 18:21:40 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -217,7 +216,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[FavoriteBooks]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[FavoriteBooks]    Script Date: 02-12-2025 18:21:40 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -232,7 +231,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[OrderItems]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[OrderItems]    Script Date: 02-12-2025 18:21:40 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -249,7 +248,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Orders]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[Orders]    Script Date: 02-12-2025 18:21:40 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -268,7 +267,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[PaymentType]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[PaymentType]    Script Date: 02-12-2025 18:21:40 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -282,7 +281,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Roles]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[Roles]    Script Date: 02-12-2025 18:21:40 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -296,7 +295,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[UserRoles]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[UserRoles]    Script Date: 02-12-2025 18:21:40 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -311,7 +310,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 02-12-2025 15:28:01 ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 02-12-2025 18:21:40 ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -329,18 +328,6 @@ PRIMARY KEY CLUSTERED
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
-GO
-SET IDENTITY_INSERT [dbo].[Address] ON 
-GO
-INSERT [dbo].[Address] ([Id], [UserId], [Full_Name], [Country], [State], [city], [Street], [House_No], [Phone], [Saved_Address]) VALUES (1, 5, N'Monkey D Luffy', N'India', N'Telanagana', N'Hyderabad', N'Balapur', N'20-153', N'7894561230', 1)
-GO
-INSERT [dbo].[Address] ([Id], [UserId], [Full_Name], [Country], [State], [city], [Street], [House_No], [Phone], [Saved_Address]) VALUES (2, 4, N'Test', N'USA', N'Los angeles', N' ssd', N'j cjsnsdn', N'45-258', N'5412397860', 1)
-GO
-INSERT [dbo].[Address] ([Id], [UserId], [Full_Name], [Country], [State], [city], [Street], [House_No], [Phone], [Saved_Address]) VALUES (3, 4, N'Test', N'USA', N'Los angeles', N' ssd', N'j cjsnsdn', N'45-258', N'5412397860', 1)
-GO
-INSERT [dbo].[Address] ([Id], [UserId], [Full_Name], [Country], [State], [city], [Street], [House_No], [Phone], [Saved_Address]) VALUES (4, 6, N'Naruto Uzumaki', N'Land Of Fire', N'Konoha', N'Hidden Leaf', N'konogakure', N'45-159', N'8794531986', 1)
-GO
-SET IDENTITY_INSERT [dbo].[Address] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Books] ON 
 GO
@@ -382,24 +369,6 @@ INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [
 GO
 SET IDENTITY_INSERT [dbo].[Books] OFF
 GO
-SET IDENTITY_INSERT [dbo].[Cart] ON 
-GO
-INSERT [dbo].[Cart] ([Id], [UserName], [CreatedAt], [UpdatedAt]) VALUES (1, N'Luffy', CAST(N'2025-08-12T10:12:39.237' AS DateTime), CAST(N'2025-09-01T08:48:46.097' AS DateTime))
-GO
-INSERT [dbo].[Cart] ([Id], [UserName], [CreatedAt], [UpdatedAt]) VALUES (2, N'Test', CAST(N'2025-08-12T11:20:29.670' AS DateTime), CAST(N'2025-08-20T14:22:44.820' AS DateTime))
-GO
-INSERT [dbo].[Cart] ([Id], [UserName], [CreatedAt], [UpdatedAt]) VALUES (3, N'Naruto', CAST(N'2025-08-21T10:30:59.860' AS DateTime), CAST(N'2025-08-21T12:36:50.980' AS DateTime))
-GO
-SET IDENTITY_INSERT [dbo].[Cart] OFF
-GO
-SET IDENTITY_INSERT [dbo].[CartItem] ON 
-GO
-INSERT [dbo].[CartItem] ([Id], [CartId], [BookId], [Quantity], [UnitPrice]) VALUES (77, 3, 25, 1, CAST(479.00 AS Decimal(10, 2)))
-GO
-INSERT [dbo].[CartItem] ([Id], [CartId], [BookId], [Quantity], [UnitPrice]) VALUES (89, 1, 28, 1, CAST(349.00 AS Decimal(10, 2)))
-GO
-SET IDENTITY_INSERT [dbo].[CartItem] OFF
-GO
 SET IDENTITY_INSERT [dbo].[Categories] ON 
 GO
 INSERT [dbo].[Categories] ([Id], [Name]) VALUES (39, N'Fantasy')
@@ -432,38 +401,6 @@ INSERT [dbo].[DeliveryStatus] ([Id], [Name]) VALUES (4, N'Cancelled')
 GO
 SET IDENTITY_INSERT [dbo].[DeliveryStatus] OFF
 GO
-SET IDENTITY_INSERT [dbo].[FavoriteBooks] ON 
-GO
-INSERT [dbo].[FavoriteBooks] ([Id], [userId], [BookId]) VALUES (8, 6, 23)
-GO
-INSERT [dbo].[FavoriteBooks] ([Id], [userId], [BookId]) VALUES (9, 6, 29)
-GO
-INSERT [dbo].[FavoriteBooks] ([Id], [userId], [BookId]) VALUES (69, 5, 29)
-GO
-INSERT [dbo].[FavoriteBooks] ([Id], [userId], [BookId]) VALUES (70, 5, 27)
-GO
-SET IDENTITY_INSERT [dbo].[FavoriteBooks] OFF
-GO
-SET IDENTITY_INSERT [dbo].[OrderItems] ON 
-GO
-INSERT [dbo].[OrderItems] ([Id], [OrderId], [BookId], [Quantity], [UnitPrice]) VALUES (1, 1, 25, 1, CAST(479.00 AS Decimal(18, 2)))
-GO
-INSERT [dbo].[OrderItems] ([Id], [OrderId], [BookId], [Quantity], [UnitPrice]) VALUES (2, 3, 23, 1, CAST(399.00 AS Decimal(18, 2)))
-GO
-INSERT [dbo].[OrderItems] ([Id], [OrderId], [BookId], [Quantity], [UnitPrice]) VALUES (3, 4, 29, 6, CAST(2999.00 AS Decimal(18, 2)))
-GO
-SET IDENTITY_INSERT [dbo].[OrderItems] OFF
-GO
-SET IDENTITY_INSERT [dbo].[Orders] ON 
-GO
-INSERT [dbo].[Orders] ([Id], [UserId], [OrderDate], [TotalAmount], [DeliveryStatusId], [PaymentTypeId], [AddressId]) VALUES (1, 5, CAST(N'2025-08-25T20:34:13.027' AS DateTime), CAST(479.00 AS Decimal(18, 2)), 3, 1, 1)
-GO
-INSERT [dbo].[Orders] ([Id], [UserId], [OrderDate], [TotalAmount], [DeliveryStatusId], [PaymentTypeId], [AddressId]) VALUES (3, 5, CAST(N'2025-08-25T20:49:21.280' AS DateTime), CAST(399.00 AS Decimal(18, 2)), 1, 2, 1)
-GO
-INSERT [dbo].[Orders] ([Id], [UserId], [OrderDate], [TotalAmount], [DeliveryStatusId], [PaymentTypeId], [AddressId]) VALUES (4, 5, CAST(N'2025-08-28T15:17:28.633' AS DateTime), CAST(17994.00 AS Decimal(18, 2)), 1, 2, 1)
-GO
-SET IDENTITY_INSERT [dbo].[Orders] OFF
-GO
 SET IDENTITY_INSERT [dbo].[PaymentType] ON 
 GO
 INSERT [dbo].[PaymentType] ([Id], [Name]) VALUES (1, N'Cash on Delivery')
@@ -482,29 +419,9 @@ INSERT [dbo].[Roles] ([Id], [Name]) VALUES (2, N'User')
 GO
 SET IDENTITY_INSERT [dbo].[Roles] OFF
 GO
-INSERT [dbo].[UserRoles] ([UserId], [RoleId]) VALUES (2, 1)
-GO
-INSERT [dbo].[UserRoles] ([UserId], [RoleId]) VALUES (4, 2)
-GO
-INSERT [dbo].[UserRoles] ([UserId], [RoleId]) VALUES (5, 2)
-GO
-INSERT [dbo].[UserRoles] ([UserId], [RoleId]) VALUES (6, 2)
-GO
-SET IDENTITY_INSERT [dbo].[Users] ON 
-GO
-INSERT [dbo].[Users] ([Id], [Username], [PasswordHash], [Email], [CreatedAt], [UpdatedAt], [IsActive]) VALUES (2, N'admin', N'AQAAAAIAAYagAAAAEHg1/5nVPTJBoORPB+QECklfCeHh/pO0hCbLutk2EXQWIeaWQQcH2w/WlfI3V5m5cw==', N'admin@example.com', CAST(N'2025-08-08T14:39:58.327' AS DateTime), CAST(N'2025-08-14T13:42:58.930' AS DateTime), 1)
-GO
-INSERT [dbo].[Users] ([Id], [Username], [PasswordHash], [Email], [CreatedAt], [UpdatedAt], [IsActive]) VALUES (4, N'Test', N'AQAAAAIAAYagAAAAEJMnFWbeDV+h/TtkscjcjL87IRfLiehJVOIXzFBTvs07PSP4kmT86baMsizCtklDog==', N'test@gmail.com', CAST(N'2025-08-14T16:34:30.233' AS DateTime), CAST(N'2025-08-14T16:41:06.460' AS DateTime), 1)
-GO
-INSERT [dbo].[Users] ([Id], [Username], [PasswordHash], [Email], [CreatedAt], [UpdatedAt], [IsActive]) VALUES (5, N'Luffy', N'AQAAAAIAAYagAAAAEIFfGeH4OOr3p7XzMnlsM3/fPvpZOfpesANElpvpPm7a68kHkHCC8HYdC0ARnZM8KQ==', N'luffy@gmail.com', CAST(N'2025-08-18T16:11:29.977' AS DateTime), NULL, 1)
-GO
-INSERT [dbo].[Users] ([Id], [Username], [PasswordHash], [Email], [CreatedAt], [UpdatedAt], [IsActive]) VALUES (6, N'Naruto', N'AQAAAAIAAYagAAAAEDh7pJ4RKLUrfAPmK5ERr+Y5YmXJIUW59y1AIvss7+txIjvLw9AEL/vgJB4elTCLnA==', N'naruto@gmail.com', CAST(N'2025-08-21T14:06:53.760' AS DateTime), NULL, 1)
-GO
-SET IDENTITY_INSERT [dbo].[Users] OFF
-GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Books__447D36EAF5009A4E]    Script Date: 02-12-2025 15:28:02 ******/
+/****** Object:  Index [UQ__Books__447D36EAF5009A4E]    Script Date: 02-12-2025 18:21:40 ******/
 ALTER TABLE [dbo].[Books] ADD UNIQUE NONCLUSTERED 
 (
 	[ISBN] ASC
@@ -512,7 +429,7 @@ ALTER TABLE [dbo].[Books] ADD UNIQUE NONCLUSTERED
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Roles__737584F69F1BCF15]    Script Date: 02-12-2025 15:28:02 ******/
+/****** Object:  Index [UQ__Roles__737584F69F1BCF15]    Script Date: 02-12-2025 18:21:40 ******/
 ALTER TABLE [dbo].[Roles] ADD UNIQUE NONCLUSTERED 
 (
 	[Name] ASC
@@ -520,7 +437,7 @@ ALTER TABLE [dbo].[Roles] ADD UNIQUE NONCLUSTERED
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Users__536C85E4E8ECAF09]    Script Date: 02-12-2025 15:28:02 ******/
+/****** Object:  Index [UQ__Users__536C85E4E8ECAF09]    Script Date: 02-12-2025 18:21:40 ******/
 ALTER TABLE [dbo].[Users] ADD UNIQUE NONCLUSTERED 
 (
 	[Username] ASC
@@ -528,7 +445,7 @@ ALTER TABLE [dbo].[Users] ADD UNIQUE NONCLUSTERED
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Users__A9D105347F3AF854]    Script Date: 02-12-2025 15:28:02 ******/
+/****** Object:  Index [UQ__Users__A9D105347F3AF854]    Script Date: 02-12-2025 18:21:40 ******/
 ALTER TABLE [dbo].[Users] ADD UNIQUE NONCLUSTERED 
 (
 	[Email] ASC
