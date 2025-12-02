@@ -1,0 +1,82 @@
+﻿@model List<UserViewModel>
+
+<div class="container mt-2">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex align-items-center ms-auto">
+            @* <a  class="btn btn-success me-3">
+                <i class="bi bi-plus-circle me-1"></i> Create User
+            </a> *@
+            <div class="input-group rounded" style="width:200px;">
+                <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                <span class="input-group-text border-0" id="search-addon">
+                    <i class="fas fa-search"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h5><i class="fas fa-users me-2"></i>Manage User</h5>
+        </div>
+        <div class="card-body table-responsive">
+            <table id="usersDataTable" class="table table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@user.UserName</td>
+                            <td>@user.Email</td>
+                            <td>
+                                <span class="badge @(
+                                      user.Role == "Admin" ? "bg-danger" :
+                                      user.Role == "Manager" ? "bg-warning text-dark" : "bg-secondary")">@user.Role
+                                </span>
+                            </td>
+                            <td>
+                                @if (user.IsActive)
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Inactive</span>
+                                }
+                            </td>
+                            <td class="text-end">
+                                @* <a href="@Url.Action("EditUser", "Admin", new { id = user.Id })" class="btn btn-sm btn-outline-primary me-1">
+                                    <i class="fas fa-pen"></i>
+                                </a> *@
+                                <a href="@Url.Action("DeleteUser", "Admin", new { id = user.Id })" class="btn btn-sm btn-outline-danger">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $('#usersDataTable').DataTable({
+            lengthChange: false,
+            info: false,
+            paging: true,
+            searching: false,
+            ordering: false,
+            pageLength: 6
+        });
+    </script>
+}
+
+

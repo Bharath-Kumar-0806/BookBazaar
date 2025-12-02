@@ -1,0 +1,28 @@
+﻿
+@if (TempData["success"] != null)
+{
+    <script>
+
+        toastr.options = {
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "1500",
+            "extendedTimeOut": "1000"
+
+        }
+        toastr.success('@TempData["success"]');
+    </script>
+}
+@if (TempData["error"] != null)
+{
+    <script>
+
+        toastr.options = {
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "1500",
+            "extendedTimeOut": "1000"
+        }
+        toastr.error('@TempData["error"]');
+    </script>
+}

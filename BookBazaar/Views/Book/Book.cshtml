@@ -1,0 +1,160 @@
+﻿@model List<Books>
+
+@{
+    ViewData["Title"] = "Books";
+    Layout = "~/Views/Admin/_Layout.cshtml";
+}
+
+<div class="container mt-2">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex align-items-center ms-auto">
+            <a asp-controller="Book" asp-action="CreateBook" class="btn btn-success me-3">
+                <i class="bi bi-plus-circle me-1"></i> Create New Book
+            </a>
+
+            <form asp-action="SearchBook" asp-controller="Book" method="post">
+                    <div class="input-group me-3">
+                        <input id="searchBox" 
+                               type="search" 
+                               name="search" 
+                               class="form-control rounded" 
+                               placeholder="Search" 
+                               aria-label="Search" 
+                               aria-describedby="search-addon" 
+                               style=" width:200px;font-size:14px;"
+                               value="@ViewBag.Search" />
+
+                       <button type="submit" class="btn bg-info" data-mdb-ripple-init>
+                            <i class="fas fa-search"></i>
+                       </button>
+                    </div> 
+            </form>
+        </div>
+    </div>
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h5><i class="fa-solid fa-book"></i> Manage Books</h5>
+        </div>
+        <div class="card-body table-responsive">
+            <table id="BooksDataTable" class="table table-hover">
+                <thead class="table-primary">
+                    <tr class="text-center">
+                        <th style="width: 120px;">Cover</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>ISBN</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th style="width: 160px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Count > 0)
+                    {
+                        foreach (var book in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <img src="~/images/@book.PhotoPath" alt="Cover" class="img-thumbnail" style="width: 60px; height: 80px; object-fit: cover;" />
+                                </td>
+                                <td class="text-start">@book.Title</td>
+                                <td class="text-start">@book.Author</td>
+                                <td><span class="badge bg-secondary">@book.ISBN</span></td>
+                                <td>
+                                    <i class="fa-solid fa-indian-rupee-sign"></i> @book.Price.ToString("F2")
+                                </td>
+                                <td>
+                                    <span class="badge bg-info text-dark">@book.Stock</span>
+                                </td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@book.Id" class="btn btn-outline-primary btn-sm me-1" title="Edit">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+                                    <button type="button"
+                                            class="btn btn-outline-danger btn-sm open-delete-modal"
+                                            data-mdb-toggle="modal"
+                                            data-mdb-target="#deleteModal"
+                                            data-book-id="@book.Id"
+                                            data-book-title="@book.Title"
+                                            title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-muted">No books found.</td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-action="Delete">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete "<strong id="bookTitle"></strong>"?
+                    <input type="hidden" name="id" id="bookIdToDelete" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const deleteButtons = document.querySelectorAll("button[data-book-id]");
+            const modalEl = document.getElementById("deleteModal");
+
+            deleteButtons.forEach(button => {
+                button.addEventListener("click", function () {
+                    const bookId = this.getAttribute('data-book-id');
+                    const bookTitle = this.getAttribute('data-book-title');
+
+                    // Fill modal fields
+                    document.getElementById("bookIdToDelete").value = bookId;
+                    document.getElementById("bookTitle").innerText = bookTitle;
+
+                    // 🛠 Show modal using MDB
+                    if (window.mdb && mdb.Modal) {
+                        const instance = new mdb.Modal(modalEl);
+                        instance.show();
+                    } else {
+                        console.error("MDB Modal is not available.");
+                    }
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $('#BooksDataTable').DataTable({
+                lengthChange: false,
+                info: false,
+                paging: true,
+                searching: false,
+                ordering: false,
+                pageLength: 4
+            });
+        });
+    </script>
+}

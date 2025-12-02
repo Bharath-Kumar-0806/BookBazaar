@@ -1,0 +1,58 @@
+﻿@model List<BookVM>
+
+<div class="container py-4">
+    <h3 class="mb-4 fw-bold">📚 All Books</h3>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
+            @foreach (var book in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light book-image-wrapper"
+                             data-mdb-ripple-color="light">
+                            <a asp-action="BookDetails" asp-controller="Home" asp-route-id="@book.Id">
+                                <img src="~/images/@book.PhotoPath" alt="@book.Title" />
+                            </a>
+                            <div class="wishlistImgIcon" onclick="@(User.Identity.IsAuthenticated ?(book.IsInWishList ? $"removeFromWishList({book.Id})" :
+                                                                                                                        $"addToWishList({book.Id})") :
+                                                                                                                        "showLoginPopup()")">
+                                    <i class="@(book.IsInWishList && User.Identity.IsAuthenticated ? "fa-solid" : "fa-regular") fa-heart fa-lg"
+                                       style="@(book.IsInWishList && User.Identity.IsAuthenticated ? "color: #ff0000;" : "")">
+                                    </i>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <h6 class="card-title text-truncate" title="@book.Title">@book.Title</h6>
+                            <p class="text-muted mb-1 text-truncate" title="@book.Author">@book.Author</p>
+                            <p class="fw-bold  mb-2">₹@book.Price</p>
+                            @if (@book.Stock > 0)
+                            {
+                                <form class="add-to-cart-btn-form" method="post">
+                                    <input type="hidden" name="bookId" value="@book.Id" />
+                                    <button type="submit" class="btn btn-sm btn-success w-100 add-to-cart-btn" data-book-id="@book.Id">
+                                        <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-sm btn-danger w-100">
+                                    Out of Stock
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">No books available.</div>
+    }
+</div>
+
+

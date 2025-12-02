@@ -1,0 +1,135 @@
+﻿@{
+    Layout = "~/Views/Admin/_Layout.cshtml";
+}
+
+@model List<Category>
+
+<div class="container mt-2">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex align-items-center ms-auto">
+            <a asp-controller="Category" asp-action="Create" class="btn btn-success me-3">
+                <i class="bi bi-plus-circle me-1"></i> Create Category
+            </a>
+            <div class="input-group rounded" style="width:200px;">
+                <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                <span class="input-group-text border-0" id="search-addon">
+                    <i class="fas fa-search"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h5><i class="fas fa-folder-open"></i> Manage Categories</h5>
+        </div>
+        <div class="card-body table-responsive">
+            <table id="categoriesDataTable" class="table table-hover">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Category</th>
+                        <th style="width: 160px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        foreach (var category in Model)
+                        {
+                            <tr>
+                                <td class="text-start">@category.Name</td>
+                                <td>
+                                    <a asp-controller="Category" asp-action="Edit" asp-route-id="@category.Id"
+                                       class="btn btn-outline-primary btn-sm me-2" title="Edit">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+                                    <button type="button"
+                                            class="btn btn-outline-danger btn-sm"
+                                            data-category-id="@category.Id"
+                                            data-category-name="@category.Name"
+                                            title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="2" class="text-center text-muted p-4">
+                                <p class="mb-2">No categories found.</p>
+                                <a asp-controller="Category" asp-action="Create" class="btn btn-success btn-sm">
+                                    <i class="bi bi-plus-circle me-1"></i> Add Category
+                                </a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+ 
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-action="DeletePost">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete "<strong id="categoryName"></strong>"?
+                    <input type="hidden" name="id" id="categoryIdToDelete" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-mdb-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const deleteButtons = document.querySelectorAll("button[data-category-id]");
+            const modalEl = document.getElementById("deleteModal");
+
+            deleteButtons.forEach(button => {
+                button.addEventListener("click", function () {
+                    const categoryId = this.getAttribute("data-category-id");
+                    const categoryName = this.getAttribute("data-category-name");
+
+                    // Fill modal fields
+                    document.getElementById("categoryIdToDelete").value = categoryId;
+                    document.getElementById("categoryName").innerText = categoryName;
+
+                    // 🛠 Show modal using MDB
+                    if (window.mdb && mdb.Modal) {
+                        const instance = new mdb.Modal(modalEl);
+                        instance.show();
+                     } 
+                    else {
+                        console.error("MDB Modal is not available.");
+                    }
+                });
+            });
+        });
+        $(document).ready(function () {
+            $('#categoriesDataTable').DataTable({
+                lengthChange: false,
+                info: false,
+                paging: true,
+                searching: false,
+                ordering: false,
+                pageLength: 8
+            });
+        });
+    </script>
+}

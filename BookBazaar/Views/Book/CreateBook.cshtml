@@ -1,0 +1,90 @@
+﻿@model CreateBookVM
+
+
+@{
+    ViewData["Title"] = "Books";
+
+    Layout = "~/Views/Admin/_Layout.cshtml";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0"><i class="fas fa-book-medical me-2"></i> Add New Book</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="SaveBook" method="post" enctype="multipart/form-data">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label asp-for="Title" class="form-label">Title</label>
+                        <input asp-for="Title" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Author" class="form-label">Author</label>
+                        <input asp-for="Author" class="form-control" required />
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label asp-for="ISBN" class="form-label">ISBN</label>
+                        <input asp-for="ISBN" class="form-control" />
+                    </div>
+                
+                    <div class="col-md-3">
+                        <label asp-for="Price" class="form-label">Price (INR)</label>
+                        <input asp-for="Price" class="form-control" step="0.01" required />
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Stock" class="form-label">Stock</label>
+                        <input asp-for="Stock" class="form-control" required />
+                    </div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label asp-for="CategoryId" class="form-label">Category</label>
+                        <select id="categoryDropdown" asp-for="CategoryId" class="form-select" required>
+                            <option value="">-- Select Category --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Cover Image</label>
+                        <input type="file" name="Photo" class="form-control" accept="image/*" />
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="Description" class="form-label">Description</label>
+                    <textarea asp-for="Description" rows="4" class="form-control"></textarea>
+                </div>
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-plus me-1"></i> Add Book
+                </button>
+                <a asp-action="BooksList" class="btn btn-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url:"@Url.Action("GetCategories","Book")",
+                type:"GET",
+                success:function(data){
+                    console.log(JSON.stringify(data));
+                     if (data.success) {
+                         var categoryDropdown = $("#categoryDropdown");
+                         categoryDropdown.empty();
+                         categoryDropdown.append("<option>-- Select Category --</option>");
+                         $.each(data.data, function (index, item) {
+                             var row = `<option value="${item.id}">${item.name}</option>`;
+                             categoryDropdown.append(row);
+                         });
+                     }
+                }
+                
+            });
+        });
+    </script>
+}

@@ -1,0 +1,251 @@
+﻿@model UserHomeVM
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!-- Index page -->
+<div id="trendingCarousel" class="carousel slide carousel-fade mt-2" data-mdb-carousel-init>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="https://thumbs.dreamstime.com/b/bookstore-reading-promotion-banner-featuring-book-graphics-inviting-reader-friendly-designs-340052297.jpg" class="d-block w-100" style="height: 400px; object-fit: cover;" alt="Book 1" />
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-75 rounded-3 p-3">
+                <h5>"Every Shelf Tells a Story"</h5>
+                <p>Step into a world where every book opens a door to imagination. Whether you're chasing dragons, solving mysteries, or learning something new, our digital shelves are always open. Your next adventure begins here — start browsing.</p>
+            </div>
+        </div>
+
+        <div class="carousel-item">
+            <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" class="d-block w-100" style="height: 400px; object-fit: cover;" alt="Book 2" />
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-75 rounded-3 p-3">
+                <h5>Discover Your Next Great Read</h5>
+                <p>Explore a world of stories at your fingertips. Our online bookstore offers a curated collection of bestsellers, timeless classics, and hidden gems — all from the comfort of your home. Browse by genre, author, or mood, and find books that speak to you.</p>
+            </div>
+        </div>
+        <!-- Add more carousel-items as needed -->
+    </div>
+
+    <!-- Controls -->
+    <button class="carousel-control-prev" type="button" data-mdb-target="#trendingCarousel" data-mdb-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-mdb-target="#trendingCarousel" data-mdb-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </button>
+</div>
+
+<hr class="my-4" />
+
+@* Scrollable Book Section – New Arrivals *@
+<div class="container mt-4 position-relative">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="fw-bold text-dark">New Arrivals</h5>
+        <a asp-action="GetNewArrivalsViewAll" asp-controller="Home" class="btn btn-outline-primary btn-sm">View All</a>
+    </div>
+
+    <!--Left Scroll Button -->
+    <button id="scrollLeftBtn_new" class="scroll-btn-custom left" onclick="scrollBooks('newArrivalsScroll', -300)">
+        <i class="bi bi-chevron-left"></i>
+    </button>
+
+    <!-- Right Scroll Button -->
+    <button id="scrollRightBtn_new" class="scroll-btn-custom right" onclick="scrollBooks('newArrivalsScroll', 300)">
+        <i class="bi bi-chevron-right"></i>
+    </button>
+
+    <!--New Arrivals Scroll Container -->
+    <div id="newArrivalsScroll" class="d-flex flex-nowrap overflow-hidden pb-3">
+        @if (Model != null && Model.NewArrivals.Count > 0)
+        {
+            foreach (var book in Model.NewArrivals)
+            {
+                <div class="card me-3 shadow-sm" style="min-width: 200px; max-width: 200px;">
+
+                    <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light book-image-wrapper">
+                         <a asp-action="BookDetails" asp-controller="Home" asp-route-id="@book.Id">
+                            <img src="~/images/@book.PhotoPath" alt="Book Image" />
+                         </a>
+
+                        <div class="wishlistImgIcon" onclick="@(User.Identity.IsAuthenticated ? 
+                                                                       (book.IsInWishList ? $"removeFromWishList({book.Id})": $"addToWishList({book.Id})"):
+                                                                        "showLoginPopup()")">
+                            <i class="@(book.IsInWishList && User.Identity.IsAuthenticated ? "fa-solid" : "fa-regular") fa-heart fa-lg"
+                               style="@(book.IsInWishList && User.Identity.IsAuthenticated ? "color: #ff0000;" : "")">
+                            </i>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-2">
+                        <h6 class="card-title mb-1 text-truncate-single">@book.Title</h6>
+                        <p class="text-muted mb-1 text-truncate-single">@book.Author</p>
+                        <p class="fw-bold  mb-2">₹@book.Price</p>
+                        @if (@book.Stock > 0)
+                        {
+                            <form class="add-to-cart-btn-form" method="post">
+                                <input type="hidden" name="bookId" value="@book.Id" />
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <button type="submit" class="btn btn-sm btn-success w-100 add-to-cart-btn" data-book-id="@book.Id">
+                                        <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-sm btn-success w-100" onclick="showLoginPopup()">
+                                        <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                                    </button>
+                                }
+                            </form>
+                       }
+                       else
+                       {
+                           <button type="button" class="btn btn-sm btn-danger w-100">
+                               Out of Stock
+                           </button>
+                       }
+                    </div>
+                </div>
+            }
+        }
+       else
+       {
+           <h3>Coming soon</h3>
+       }
+       </div>
+</div>
+
+@* Scrollable Book Section – Best Sellers *@
+<div class="container mt-4 position-relative">
+
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="fw-bold text-dark">🏆 Best Sellers</h5>
+        <a asp-action="GetBestSellersViewAll"  asp-controller="Home" class="btn btn-outline-primary btn-sm">View All</a>
+    </div>
+
+    <!--Left Scroll Button -->
+    <button id="scrollLeftBtn_best" class="scroll-btn-custom left" onclick="scrollBooks('bestSellersScroll', -300)">
+        <i class="bi bi-chevron-left"></i>
+    </button>
+
+    <!-- Right Scroll Button -->
+    <button id="scrollRightBtn_best" class="scroll-btn-custom right" onclick="scrollBooks('bestSellersScroll', 300)">
+        <i class="bi bi-chevron-right"></i>
+    </button>
+
+    <!--Best seller Scroll Container -->
+    <div id="bestSellersScroll" class="d-flex flex-nowrap overflow-hidden pb-3">
+        @if (Model != null && Model.BestSellers.Count > 0)
+        {
+            foreach (var book in Model.BestSellers)
+            {
+                <div class="card me-3 shadow-sm" style="min-width: 200px; max-width: 200px;">
+
+                    <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light book-image-wrapper">
+
+                        <a asp-action="BookDetails" asp-controller="Home" asp-route-id="@book.Id">
+                            <img src="~/images/@book.PhotoPath" alt="Book Image" />
+                        </a>
+
+                        <div class="wishlistImgIcon" onclick="@(User.Identity.IsAuthenticated ?
+                                                                              (book.IsInWishList ? $"removeFromWishList({book.Id})" :
+                                                                                                   $"addToWishList({book.Id})") :
+                                                                                                   "showLoginPopup()")">
+                            <i class="@(book.IsInWishList && User.Identity.IsAuthenticated ? "fa-solid" : "fa-regular") fa-heart fa-lg"
+                               style="@(book.IsInWishList && User.Identity.IsAuthenticated ? "color: #ff0000;" : "")">
+                            </i>
+                        </div>
+
+                    </div>
+
+                    <div class="card-body p-2">
+                        <h6 class="card-title mb-1 text-truncate-single">@book.Title</h6>
+                        <p class="text-muted mb-1 text-truncate-single">@book.Author</p>
+                        <p class="fw-bold  mb-2">₹@book.Price</p>
+                        @if (@book.Stock > 0)
+                        {
+                            <form class="add-to-cart-btn-form" method="post">
+                                <input type="hidden" name="bookId" value="@book.Id" />
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <button type="submit" class="btn btn-sm btn-success w-100 add-to-cart-btn" data-book-id="@book.Id">
+                                        <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-sm btn-success w-100" onclick="showLoginPopup()">
+                                        <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                                    </button>
+                                }
+
+                            </form>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-sm btn-danger w-100">
+                                Out of Stock
+                            </button>
+                        }
+
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <h3>Coming soon</h3>
+        }
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script>
+
+        function scrollBooks(containerId, scrollAmount, leftBtnId, rightBtnId) {
+            const container = document.getElementById(containerId);
+            container.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+            setTimeout(() => {
+                updateScrollButtons(containerId, leftBtnId, rightBtnId);
+            }, 300);
+        }
+        function updateScrollButtons(containerId, leftBtnId, rightBtnId) {
+            const container = document.getElementById(containerId);
+            const leftBtn = document.getElementById(leftBtnId);
+            const rightBtn = document.getElementById(rightBtnId);
+
+            if (!container || !leftBtn || !rightBtn) return;
+
+            const scrollLeft = container.scrollLeft;
+            const scrollWidth = container.scrollWidth;
+            const clientWidth = container.clientWidth;
+
+            if (scrollWidth <= clientWidth) {
+                leftBtn.style.display = 'none';
+                rightBtn.style.display = 'none';
+                return;
+            }
+            leftBtn.style.display = scrollLeft > 0 ? 'block' : 'none';
+            rightBtn.style.display = (scrollLeft + clientWidth >= scrollWidth - 1) ? 'none' : 'block';
+        }
+
+        // Init on page load
+        window.addEventListener('load', () => {
+            updateScrollButtons('newArrivalsScroll', 'scrollLeftBtn_new', 'scrollRightBtn_new');
+            updateScrollButtons('bestSellersScroll', 'scrollLeftBtn_best', 'scrollRightBtn_best');
+        });
+        // Update on scroll
+        document.getElementById('newArrivalsScroll').addEventListener('scroll', () => {
+            updateScrollButtons('newArrivalsScroll', 'scrollLeftBtn_new', 'scrollRightBtn_new');
+        });
+
+        document.getElementById('bestSellersScroll').addEventListener('scroll', () => {
+            updateScrollButtons('bestSellersScroll', 'scrollLeftBtn_best', 'scrollRightBtn_best');
+        });
+
+    </script>
+}
+

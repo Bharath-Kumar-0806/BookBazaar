@@ -1,0 +1,149 @@
+﻿@model BuyNowViewModel
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<h2 class="my-4">Checkout</h2>
+
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Shipping Information</h5>
+            </div>
+            @if (!string.IsNullOrEmpty(TempData["ErrorMessage"] as string))
+            {
+                <div class="alert alert-danger">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+            <div class="card-body">
+                <form method="post" asp-controller="Orders" asp-action="ConfirmBuyNow">
+
+                    <!-- Dropdown for existing addresses -->
+                    <div class="mb-3">
+                        <label class="form-label">Select Address</label>
+                        <select name="SelectedAddressId" class="form-select" asp-items="@(new SelectList(Model.SavedAddresses, "Id", "DisplayAddress"))">
+                            <option value="">-- Select a shipping address --</option>
+                        </select>
+                    </div>
+
+                    <!-- Toggle new address form -->
+                    <button type="button" class="btn btn-outline-secondary btn-sm mb-3" onclick="$('#newAddressForm').toggle();">
+                        + Add New Address
+                    </button>
+
+                    <!-- New Address Form -->
+                    <div id="newAddressForm" style="display: none;">
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="Full_Name" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Country</label>
+                            <input type="text" name="Country" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">State</label>
+                            <input type="text" name="State" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">City</label>
+                            <input type="text" name="City" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Street</label>
+                            <input type="text" name="Street" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">House_No</label>
+                            <input type="text" name="House_No" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="text" name="Phone" class="form-control" />
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="SaveNewAddress" value="true" id="saveNewAddressCheck">
+                            <label class="form-check-label" for="saveNewAddressCheck">
+                                Save this address for future use
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Payment method -->
+                    <div class="mb-3">
+                        <label class="form-label">Payment Method</label>
+                        <select name="PaymentTypeId" class="form-select" asp-items="@(new SelectList(Model.PaymentType, "Id", "Name"))" required>
+                            <option value="">-- Select Payment Type --</option>
+                        </select>
+                    </div>
+
+                    <!-- Order summary  -->
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5>Order Summary</h5>
+                        </div>
+                        <div class="card-body">
+                          
+                                <div class="d-flex justify-content-between mb-2">
+                                    <div>
+                                        <input type="hidden" name="BookId" value="@Model.BookId" />
+                                        <strong>@Model.BookTitle</strong>
+                                        <input id="quantityIncrementer" type="number" name="Quantity" class="form-control" value="@Model.Quantity" min="1" style="width: 80px;" />
+                                        </div>
+                                    <div>
+                                    <input id="unitPrice"  type="hidden" name="UnitPrice" value="@Model.UnitPrice" />
+                                        ₹@((Model.Quantity * Model.UnitPrice))
+                                    </div>
+                                </div>
+                            
+                            <hr />
+                            <div class="d-flex justify-content-between">
+                                <input type="hidden" name="Subtotal" value="@Model.Subtotal" />
+                                <strong>Subtotal:</strong>
+                                <strong id="subTotal">₹@Model.Subtotal</strong> 
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <input type="hidden" name="ShippingCost" value="@Model.ShippingCost" />
+                                <strong>Shipping:</strong>
+                                <strong id="shippingCost">₹@Model.ShippingCost</strong>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <input type="hidden" name="Total" value="@Model.Total" />
+                                <strong>Total:</strong>
+                                <strong id="total">₹@Model.Total</strong> 
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-3 w-100">Place Order</button>
+                </form>
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+
+        //this calculates total price and sets value if user increases quantity
+        $(document).ready(function () {
+            let unitPrice = parseFloat($("#unitPrice").val());
+            let shippingCost = parseFloat($("input[name='ShippingCost']").val());
+
+            $("#quantityIncrementer").on("input", function () {
+                let quantity = parseInt($(this).val()) || 0;
+
+                let calculatedSubtotal = quantity * unitPrice;
+                let calculatedTotal = calculatedSubtotal + shippingCost;
+
+                $("#subTotal").text("₹" + calculatedSubtotal.toFixed(2));
+                $("#total").text("₹" + calculatedTotal.toFixed(2));
+               
+            });
+        });
+
+    </script>
+}

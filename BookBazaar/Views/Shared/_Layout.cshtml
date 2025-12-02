@@ -1,0 +1,612 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BookBazaar</title>
+
+    <!--  Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <!-- bootstap icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/9.1.0/mdb.min.css" rel="stylesheet" />
+
+
+
+    <style>
+        .scroll-btn-custom {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            background-color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .scroll-btn-custom.left {
+            left: -40px;
+        }
+
+        .scroll-btn-custom.right {
+            right: -40px;
+        }
+
+        .scroll-btn-custom[style*="display: none"] {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #newArrivalsScroll,
+        #bestSellersScroll {
+            scrollbar-width: none;
+        }
+
+        #newArrivalsScroll::-webkit-scrollbar,
+            #bestSellersScroll::-webkit-scrollbar {
+                display: none;
+            }
+
+        @@media (max-width: 576px) {
+            .scroll-btn-custom{
+            width: 30px;
+            height: 30px;
+          }
+
+        }
+        
+
+        .text-truncate-single {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+
+        .book-image-wrapper {
+            height: 250px;
+            width: 100%;
+            overflow: hidden;
+            background-color: #f8f9fa; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .book-image-wrapper img {
+            height: 100%;
+            width: auto;
+            object-fit: contain;
+            max-width: 100%;
+        }
+
+        .toast-success {
+            background-color: #51A351 !important;
+            color: white !important;
+        }
+
+        .toast-error {
+            background-color: #BD362F !important;
+            color: white !important;
+        }
+
+        .toast-info {
+            background-color: #2F96B4 !important;
+            color: white !important;
+        }
+
+        .toast-warning {
+            background-color: #F89406 !important;
+            color: white !important;
+        }
+
+        .toast {
+            opacity: 0.95 !important;
+            font-family: Roboto, sans-serif;
+            font-size: 14px;
+        }
+
+
+        .wishlistImgIcon {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            background: #fff;
+            border-radius: 50% 0 50% 50%;
+            padding: 5px;
+            border: 1px rgba(0, 0, 0, 0.12) solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status-pending {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .status-shipped {
+            background-color: #0dcaf0;
+            color: #212529;
+        }
+
+        .status-delivered {
+            background-color: #198754;
+            color: white;
+        }
+
+        .status-cancelled {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .status-default {
+            background-color: #6c757d;
+            color: white;
+        }
+    </style>
+
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header>
+        <nav class="navbar navbar-expand-lg bg-dark bg-gradient text-white sticky-top">
+            <div class="container-fluid">
+                <!-- Collapsible wrapper -->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Navbar brand -->
+                    <a class=" navbar-brand mt-2 mt-lg-0" asp-controller="Home" asp-action="Index" style="color:white;">
+                        Book Bazaar
+                    </a>
+
+                    <!-- Left links -->
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0" >
+                        <li class="nav-item" >
+                            <a class="nav-link" asp-controller="Home" asp-action="Index" style="color:white;">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a data-mdb-dropdown-init
+                               class="nav-link text-reset  dropdown-toggle hidden-arrow"
+                               id="navbarDropdownMenuLink"
+                               role="button"
+                               aria-expanded="false">
+                                Category
+                            </a>
+                            <ul id="categoryDropdown" class="dropdown-menu dropdown-menu-dark dropdown-menu-end"
+                                aria-labelledby="navbarDropdownMenuAvatar">
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Privacy" style="color:white;">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Right elements -->
+                <div class="d-flex align-items-center">
+                    <form asp-action="SearchResults" asp-controller="Home" method="post">
+                        <div class="input-group me-3">
+                            <input id="searchBox" type="search" name="search" class="form-control rounded" placeholder="Search by Title, Author or ISBN" aria-label="Search" aria-describedby="search-addon" style="width: 300px; font-size:14px;" />
+                            <button type="submit" class="btn bg-info" data-mdb-ripple-init>
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                   
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="dropdown mx-3 d-flex align-items-center">
+                            <a data-mdb-dropdown-init
+                               class="dropdown-toggle d-flex align-items-center hidden-arrow text-decoration-none text-white"
+                               href="#"
+                               id="navbarDropdownMenuAvatar"
+                               role="button"
+                               aria-expanded="false">
+                                <span class="me-2">Hello, <strong>@User.Identity.Name</strong></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end"
+                                aria-labelledby="navbarDropdownMenuAvatar">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="UserSettings"><i class="fa-solid fa-gear me-1"></i> Settings</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Orders" asp-action="GetMyOrders"><i class="bi bi-bag-check-fill me-1"></i> My Orders</a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider" />
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Logout"><i class="fa-solid fa-arrow-right-from-bracket me-1"></i> Logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="dropdown  mx-3">
+                            <a data-mdb-dropdown-init
+                               class="dropdown-toggle d-flex align-items-center hidden-arrow text-white"
+                               href="#"
+                               id="navbarDropdownMenuAvatar"
+                               role="button"
+                               aria-expanded="false">
+                                <i class="fa-solid fa-circle-user fa-2xl"></i>
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end"
+                                aria-labelledby="navbarDropdownMenuAvatar">
+                                <li><a class="dropdown-item" asp-controller="Account" asp-action="Login">Login</a></li>
+                                <li><a class="dropdown-item" asp-controller="Account" asp-action="Register">Register</a></li>
+                            </ul>
+                        </div>
+                    }
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <!-- Cart Icon -->
+                        <a class="text-reset me-3 text-white" asp-controller="Cart" asp-action="Cart">
+                            <i class="fas fa-shopping-cart fa-xl"></i>
+                            <span id="cartItemsCount" class="badge rounded-pill badge-notification bg-danger">0</span>
+                        </a>
+                        <!-- Favorites Icon -->
+                        <a class="text-reset me-3 text-white" asp-controller="Home" asp-action="GetWishListBooks">
+                            <i class="fa-solid fa-heart fa-xl"></i>
+                            <span id="wishListCount" class="badge rounded-pill badge-notification bg-danger">0</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <!-- Cart Icon -->
+                        <a class="text-reset me-3 text-white" onclick="showLoginPopup()">
+                            <i class="fas fa-shopping-cart fa-xl"></i>
+                        </a>
+                        <!-- Favorites Icon -->
+                        <a  class="text-reset me-3 text-white " onclick="showLoginPopup()">
+                            <i class="fa-solid fa-heart fa-xl"></i>
+                        </a>
+                    }
+                </div>
+                <!-- Right elements -->
+            </div>
+        </nav>
+    </header>
+
+        
+    <main role="main" class="flex-fill">
+         
+        <div class="container py-2">
+            <!-- Login Modal -->
+            <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content p-4">
+                        <div class="modal-header border-0">
+                            <h5 class="modal-title" id="loginModalLabel">Login Required</h5>
+                            <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form asp-controller="Account" asp-action="Login" method="post" id="loginForm">
+                                <div data-mdb-input-init class="form-outline mb-4">
+                                    <input type="email" id="loginEmail" class="form-control" required name="Email" />
+                                    <label class="form-label" for="loginEmail">Email address</label>
+                                </div>
+
+                                <div data-mdb-input-init class="form-outline mb-4">
+                                    <input type="password" id="loginPassword" class="form-control" required name="Password" />
+                                    <label class="form-label" for="loginPassword">Password</label>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="rememberMe" />
+                                        <label class="form-check-label" for="rememberMe">Remember me</label>
+                                    </div>
+                                    <a href="/Account/ForgotPassword">Forgot password?</a>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100">Log In</button>
+                            </form>
+                        </div>
+
+                        <div class="modal-footer justify-content-center">
+                            <p class="mb-0">
+                                Don't have an account?
+                                <a href="/Account/Register" class="text-primary fw-bold">Sign up</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @RenderBody()
+        </div>
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="text-center text-lg-start bg-dark bg-gradient text-white  mt-auto">
+        <div class="text-center p-3">
+            <!-- Section: Social media -->
+            <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+                <!-- Left -->
+                <div class="me-5 d-none d-lg-block">
+                    <span>Get connected with us on social networks:</span>
+                </div>
+                <!-- Left -->
+                <!-- Right -->
+                <div>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-google"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+                <!-- Right -->
+            </section>
+            <!-- Section: Social media -->
+            <!-- Section: Links  -->
+            <section class="">
+                <div class="container text-center text-md-start mt-5">
+                    <!-- Grid row -->
+                    <div class="row mt-3">
+                        <!-- Grid column -->
+                        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                            <!-- Content -->
+                            <h6 class="text-uppercase fw-bold mb-4">
+                                <i class="fas fa-gem me-3"></i>Book Bazaar
+                            </h6>
+                             <p>
+                                Book Bazaar is India’s Largest and Most Recommended Online Bookstore offering 40+ Million selections.
+                            </p> 
+                        </div>
+                        <!-- Grid column -->
+                        <!-- Grid column -->
+                         <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                            <!-- Links -->
+                            <h6 class="text-uppercase fw-bold mb-4">
+                                Policies
+                            </h6>
+                            <p>
+                                <a href="#!" class="text-reset">Privacy Policies</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Terms of Use</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Secure Shopping</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Copyright Policy</a>
+                            </p>
+                        </div> 
+                        <!-- Grid column -->
+                        <!-- Grid column -->
+                        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                            <!-- Links -->
+                            <h6 class="text-uppercase fw-bold mb-4">
+                                Useful links
+                            </h6>
+                            <p>
+                                <a href="#!" class="text-reset">Payments</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Shipping</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Orders</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Help</a>
+                            </p>
+                        </div>
+                        <!-- Grid column -->
+                        <!-- Grid column -->
+                        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                            <!-- Links -->
+                            <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                            <p><i class="fas fa-home me-3"></i> Hyderabad, India</p>
+                            <p>
+                                <i class="fas fa-envelope me-3"></i>
+                                customerservice@bookbazaar.com
+                            </p>
+                            <p><i class="fas fa-phone me-3"></i> + 01 234 567 88</p>
+                            <p><i class="fas fa-print me-3"></i> + 01 234 567 89</p>
+                        </div>
+                        <!-- Grid column -->
+                    </div>
+                    <!-- Grid row -->
+                </div>
+            </section>
+            <!-- Section: Links  -->
+            <!-- Copyright -->
+            <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+                © 2025 Copyright:
+                <a class="text-reset fw-bold" href="#">BookBazaar.com</a>
+            </div>
+            <!-- Copyright -->
+        </div>
+    </footer>
+    <!-- Footer -->
+
+    <!--  JQUERY -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <!-- MDB -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/9.1.0/mdb.umd.min.js"></script>
+    <!-- toastr -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    @await Html.PartialAsync("_Notifications")
+    <script>
+        
+        $('#showPassword').click(function () {
+                $('#form2Example2').attr('type', $(this).is(':checked') ? 'text' : 'password');
+        });
+
+        //cheking user logged in or not
+         const isAuthenticated = @(User.Identity.IsAuthenticated.ToString().ToLower())
+         console.log(isAuthenticated);
+
+        //login popup
+        function showLoginPopup() {
+            const modal = new mdb.Modal(document.getElementById('loginModal'));
+            modal.show();
+        }
+
+        if (isAuthenticated) {
+                getWishListCount();
+                getCartCount();
+        }
+
+        //gets carts count
+        function getCartCount(){
+            $.ajax({
+                url: "@Url.Action("GetCartCount", "Home")",
+                method: 'GET',
+                success:function(data){
+                    if (data.success && data.result) {
+                        $("#cartItemsCount").text(data.result);
+                        console.log(data.result);
+                    }
+                }
+            });
+        };
+
+
+        //gets wishlist count
+        function getWishListCount(){
+            $.ajax({
+                url: "@Url.Action("GetWishListCount", "Home")",
+                method: 'GET',
+                success:function(data){
+                    if (data.success && data.result) {
+                        $("#wishListCount").text(data.result);
+                    }
+                }
+            });
+        };
+
+        //add book to wish list
+        function addToWishList(bookId){
+            $.ajax({
+                url:"@Url.Action("AddToWishList", "Home")",
+                method: "POST",
+                data: {bookId:bookId},
+                success: function (data) {
+                    if (data.success) {
+                        getCartCount();
+                        getWishListCount();
+                        window.location.reload();
+
+                    } 
+                },
+                error: function () {
+                    alert("Server error. Please try again.");
+                }
+            })
+        };
+
+        //removes book from wishlist
+        function removeFromWishList(bookId){
+            // alert(bookId);
+            $.ajax({
+                url:"@Url.Action("removeFromWishList", "Home")",
+                method: "POST",
+                data: {bookId:bookId},
+                success: function (data) {
+                    if (data.success) {
+                         getCartCount();
+                        getWishListCount();
+                         window.location.reload();
+                    }
+                },
+                error: function () {
+                    alert("Server error. Please try again.");
+                }
+            })
+        };
+
+        $(document).ready(function () {
+
+            //gets categoris and loads in nav bar
+            $.ajax({
+                url: "@Url.Action("GetCategories", "Home")", 
+                method: 'GET',
+                success: function (response) {
+                    const dropdown = $('#categoryDropdown');
+                    dropdown.empty();
+                    if (response.success && response.result && response.result.length > 0) {
+                        response.result.forEach(function (category) {
+                            dropdown.append(
+                                `<li><a class="dropdown-item" href="/Home/GetBooksByCategoryId/${category.id}" >${category.name}</a></li>`
+                            );
+                        });
+                    }
+                    else {
+                        dropdown.append('<li><a class="dropdown-item text-muted" href="#">No categories found</a></li>');
+                    }
+                },
+                error: function () {
+                    $('#categoryDropdown').html('<li><a class="dropdown-item text-danger" href="#">Error loading categories</a></li>');
+                }
+            });
+            
+            //adds to cart
+            $(".add-to-cart-btn").on("click", function (e) {
+               e.preventDefault();
+
+               var form = $(this).closest("form");
+
+               $.ajax({
+                   url: "@Url.Action("AddToCart", "Cart")",
+                   method: "POST",
+                   data: form.serialize(),
+                   success: function (data) {
+                       if (data.success) {
+                           window.location.reload();
+                           getCartCount();
+                       } else {
+                            console.log("Something went wrong while adding to call ");
+                       }
+                   },
+                   error: function () {
+                       alert("Server error. Please try again.");
+                   }
+               });
+            });
+           
+        }); //end
+        
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

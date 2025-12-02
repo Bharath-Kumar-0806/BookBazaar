@@ -1,0 +1,110 @@
+﻿@model Books
+
+
+@{
+    ViewData["Title"] = "Edit Book";
+    Layout = "~/Views/Admin/_Layout.cshtml";
+}
+
+<div class="container mt-2">
+    <div class="card shadow-lg">
+        <div class="card-header bg-warning text-dark">
+            <h4 class="mb-0"><i class="fas fa-edit me-2"></i> Edit Book</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="EditPost" method="post" enctype="multipart/form-data">
+                <!-- Hidden field for ID -->
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="PhotoPath" />
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label asp-for="Title" class="form-label">Title</label>
+                        <input asp-for="Title" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Author" class="form-label">Author</label>
+                        <input asp-for="Author" class="form-control" required />
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label asp-for="ISBN" class="form-label">ISBN</label>
+                        <input asp-for="ISBN" class="form-control" />
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="Price" class="form-label">Price (INR)</label>
+                        <input asp-for="Price" class="form-control" step="0.01" required />
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Stock" class="form-label">Stock</label>
+                        <input asp-for="Stock" class="form-control" required />
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label asp-for="CategoryId" class="form-label">Category</label>
+                        <select id="categoryDropdown" asp-for="CategoryId" class="form-select" required>
+                            <option value="">-- Select Category --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Cover Image</label>
+                        <input type="file" name="Photo" class="form-control" accept="image/*" />
+                    </div>
+                   
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label asp-for="Description" class="form-label">Description</label>
+                        <textarea asp-for="Description" rows="6" class="form-control"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        @if (!string.IsNullOrEmpty(Model.PhotoPath))
+                        {
+                            <div class="col-md-2">
+                                <p class="text-muted mb-1">Current Cover:</p>
+                                <img src="~/images/@Url.Content(Model.PhotoPath)" alt="Book Cover"  class="img-thumbnail" />
+                            </div>
+                        }
+
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-warning">
+                    <i class="fas fa-save me-1"></i> Update Book
+                </button>
+                <a asp-action="BooksList" class="btn btn-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "@Url.Action("GetCategories", "Book")",
+                type: "GET",
+                success: function (data) {
+                    if (data.success) {
+                        var categoryDropdown = $("#categoryDropdown");
+                        categoryDropdown.empty();
+                        categoryDropdown.append("<option value=''>-- Select Category --</option>");
+
+                        $.each(data.data, function (index, item) {
+                            var selected = item.id === @Model.CategoryId ? 'selected' : '';
+                            var row = `<option value="${item.id}" ${selected}>${item.name}</option>`;
+                            categoryDropdown.append(row);
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+}
