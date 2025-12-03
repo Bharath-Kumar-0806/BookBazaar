@@ -1,0 +1,510 @@
+Create database BookBazaarDb;
+GO
+USE [BookBazaarDb]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CartItem]') AND type in (N'U'))
+ALTER TABLE [dbo].[CartItem] DROP CONSTRAINT IF EXISTS [CK__CartItem__Quanti__06CD04F7]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UserRoles]') AND type in (N'U'))
+ALTER TABLE [dbo].[UserRoles] DROP CONSTRAINT IF EXISTS [FK__UserRoles__UserI__778AC167]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UserRoles]') AND type in (N'U'))
+ALTER TABLE [dbo].[UserRoles] DROP CONSTRAINT IF EXISTS [FK__UserRoles__RoleI__787EE5A0]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Orders]') AND type in (N'U'))
+ALTER TABLE [dbo].[Orders] DROP CONSTRAINT IF EXISTS [FK__Orders__UserId__4F47C5E3]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Orders]') AND type in (N'U'))
+ALTER TABLE [dbo].[Orders] DROP CONSTRAINT IF EXISTS [FK__Orders__PaymentT__51300E55]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Orders]') AND type in (N'U'))
+ALTER TABLE [dbo].[Orders] DROP CONSTRAINT IF EXISTS [FK__Orders__Delivery__503BEA1C]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Orders]') AND type in (N'U'))
+ALTER TABLE [dbo].[Orders] DROP CONSTRAINT IF EXISTS [FK__Orders__AddressI__5224328E]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[OrderItems]') AND type in (N'U'))
+ALTER TABLE [dbo].[OrderItems] DROP CONSTRAINT IF EXISTS [FK__OrderItem__Order__55009F39]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[OrderItems]') AND type in (N'U'))
+ALTER TABLE [dbo].[OrderItems] DROP CONSTRAINT IF EXISTS [FK__OrderItem__BookI__55F4C372]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FavoriteBooks]') AND type in (N'U'))
+ALTER TABLE [dbo].[FavoriteBooks] DROP CONSTRAINT IF EXISTS [FK__FavoriteB__userI__29221CFB]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FavoriteBooks]') AND type in (N'U'))
+ALTER TABLE [dbo].[FavoriteBooks] DROP CONSTRAINT IF EXISTS [FK__FavoriteB__BookI__2A164134]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CartItem]') AND type in (N'U'))
+ALTER TABLE [dbo].[CartItem] DROP CONSTRAINT IF EXISTS [FK__CartItem__CartId__07C12930]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CartItem]') AND type in (N'U'))
+ALTER TABLE [dbo].[CartItem] DROP CONSTRAINT IF EXISTS [FK__CartItem__BookId__08B54D69]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Books]') AND type in (N'U'))
+ALTER TABLE [dbo].[Books] DROP CONSTRAINT IF EXISTS [FK__Books__CategoryI__5441852A]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Address]') AND type in (N'U'))
+ALTER TABLE [dbo].[Address] DROP CONSTRAINT IF EXISTS [FK__Address__UserId__1DB06A4F]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Users]') AND type in (N'U'))
+ALTER TABLE [dbo].[Users] DROP CONSTRAINT IF EXISTS [DF__Users__IsActive__71D1E811]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Cart]') AND type in (N'U'))
+ALTER TABLE [dbo].[Cart] DROP CONSTRAINT IF EXISTS [DF__Cart__UpdatedAt__03F0984C]
+GO
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Cart]') AND type in (N'U'))
+ALTER TABLE [dbo].[Cart] DROP CONSTRAINT IF EXISTS [DF__Cart__CreatedAt__02FC7413]
+GO
+/****** Object:  Index [UQ__Users__A9D105347F3AF854]    Script Date: 02-12-2025 18:21:40 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Users]') AND type in (N'U'))
+ALTER TABLE [dbo].[Users] DROP CONSTRAINT IF EXISTS [UQ__Users__A9D105347F3AF854]
+GO
+/****** Object:  Index [UQ__Users__536C85E4E8ECAF09]    Script Date: 02-12-2025 18:21:40 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Users]') AND type in (N'U'))
+ALTER TABLE [dbo].[Users] DROP CONSTRAINT IF EXISTS [UQ__Users__536C85E4E8ECAF09]
+GO
+/****** Object:  Index [UQ__Roles__737584F69F1BCF15]    Script Date: 02-12-2025 18:21:40 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Roles]') AND type in (N'U'))
+ALTER TABLE [dbo].[Roles] DROP CONSTRAINT IF EXISTS [UQ__Roles__737584F69F1BCF15]
+GO
+/****** Object:  Index [UQ__Books__447D36EAF5009A4E]    Script Date: 02-12-2025 18:21:40 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Books]') AND type in (N'U'))
+ALTER TABLE [dbo].[Books] DROP CONSTRAINT IF EXISTS [UQ__Books__447D36EAF5009A4E]
+GO
+/****** Object:  Table [dbo].[Users]    Script Date: 02-12-2025 18:21:40 ******/
+DROP TABLE IF EXISTS [dbo].[Users]
+GO
+/****** Object:  Table [dbo].[UserRoles]    Script Date: 02-12-2025 18:21:40 ******/
+DROP TABLE IF EXISTS [dbo].[UserRoles]
+GO
+/****** Object:  Table [dbo].[Roles]    Script Date: 02-12-2025 18:21:40 ******/
+DROP TABLE IF EXISTS [dbo].[Roles]
+GO
+/****** Object:  Table [dbo].[PaymentType]    Script Date: 02-12-2025 18:21:40 ******/
+DROP TABLE IF EXISTS [dbo].[PaymentType]
+GO
+/****** Object:  Table [dbo].[Orders]    Script Date: 02-12-2025 18:21:40 ******/
+DROP TABLE IF EXISTS [dbo].[Orders]
+GO
+/****** Object:  Table [dbo].[OrderItems]    Script Date: 02-12-2025 18:21:40 ******/
+DROP TABLE IF EXISTS [dbo].[OrderItems]
+GO
+/****** Object:  Table [dbo].[FavoriteBooks]    Script Date: 02-12-2025 18:21:40 ******/
+DROP TABLE IF EXISTS [dbo].[FavoriteBooks]
+GO
+/****** Object:  Table [dbo].[DeliveryStatus]    Script Date: 02-12-2025 18:21:40 ******/
+DROP TABLE IF EXISTS [dbo].[DeliveryStatus]
+GO
+/****** Object:  Table [dbo].[Categories]    Script Date: 02-12-2025 18:21:40 ******/
+DROP TABLE IF EXISTS [dbo].[Categories]
+GO
+/****** Object:  Table [dbo].[CartItem]    Script Date: 02-12-2025 18:21:40 ******/
+DROP TABLE IF EXISTS [dbo].[CartItem]
+GO
+/****** Object:  Table [dbo].[Cart]    Script Date: 02-12-2025 18:21:40 ******/
+DROP TABLE IF EXISTS [dbo].[Cart]
+GO
+/****** Object:  Table [dbo].[Books]    Script Date: 02-12-2025 18:21:40 ******/
+DROP TABLE IF EXISTS [dbo].[Books]
+GO
+/****** Object:  Table [dbo].[Address]    Script Date: 02-12-2025 18:21:40 ******/
+DROP TABLE IF EXISTS [dbo].[Address]
+GO
+/****** Object:  Table [dbo].[Address]    Script Date: 02-12-2025 18:21:40 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Address](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] [int] NOT NULL,
+	[Full_Name] [varchar](50) NOT NULL,
+	[Country] [varchar](50) NOT NULL,
+	[State] [varchar](50) NOT NULL,
+	[city] [varchar](30) NOT NULL,
+	[Street] [varchar](30) NOT NULL,
+	[House_No] [varchar](10) NOT NULL,
+	[Phone] [varchar](12) NOT NULL,
+	[Saved_Address] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Books]    Script Date: 02-12-2025 18:21:40 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Books](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Title] [varchar](50) NULL,
+	[Author] [varchar](50) NOT NULL,
+	[Description] [varchar](max) NULL,
+	[ISBN] [varchar](30) NULL,
+	[Price] [decimal](18, 0) NOT NULL,
+	[Stock] [int] NULL,
+	[CategoryId] [int] NULL,
+	[PhotoPath] [nvarchar](max) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Cart]    Script Date: 02-12-2025 18:21:40 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Cart](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[UserName] [varchar](50) NULL,
+	[CreatedAt] [datetime] NOT NULL,
+	[UpdatedAt] [datetime] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[CartItem]    Script Date: 02-12-2025 18:21:40 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CartItem](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[CartId] [int] NOT NULL,
+	[BookId] [int] NOT NULL,
+	[Quantity] [int] NOT NULL,
+	[UnitPrice] [decimal](10, 2) NOT NULL,
+	[TotalPrice]  AS ([Quantity]*[UnitPrice]) PERSISTED,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Categories]    Script Date: 02-12-2025 18:21:40 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Categories](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [varchar](20) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[DeliveryStatus]    Script Date: 02-12-2025 18:21:40 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[DeliveryStatus](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [varchar](20) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[FavoriteBooks]    Script Date: 02-12-2025 18:21:40 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[FavoriteBooks](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[userId] [int] NULL,
+	[BookId] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[OrderItems]    Script Date: 02-12-2025 18:21:40 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[OrderItems](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[OrderId] [int] NOT NULL,
+	[BookId] [int] NOT NULL,
+	[Quantity] [int] NOT NULL,
+	[UnitPrice] [decimal](18, 2) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Orders]    Script Date: 02-12-2025 18:21:40 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Orders](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] [int] NOT NULL,
+	[OrderDate] [datetime] NOT NULL,
+	[TotalAmount] [decimal](18, 2) NOT NULL,
+	[DeliveryStatusId] [int] NOT NULL,
+	[PaymentTypeId] [int] NOT NULL,
+	[AddressId] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PaymentType]    Script Date: 02-12-2025 18:21:40 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PaymentType](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [varchar](20) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Roles]    Script Date: 02-12-2025 18:21:40 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Roles](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[UserRoles]    Script Date: 02-12-2025 18:21:40 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[UserRoles](
+	[UserId] [int] NOT NULL,
+	[RoleId] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[UserId] ASC,
+	[RoleId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Users]    Script Date: 02-12-2025 18:21:40 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Users](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Username] [nvarchar](100) NOT NULL,
+	[PasswordHash] [nvarchar](255) NOT NULL,
+	[Email] [nvarchar](150) NOT NULL,
+	[CreatedAt] [datetime] NOT NULL,
+	[UpdatedAt] [datetime] NULL,
+	[IsActive] [bit] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET IDENTITY_INSERT [dbo].[Books] ON 
+GO
+INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [Stock], [CategoryId], [PhotoPath]) VALUES (8, N'The Dragon''s Secret', N'Aria Windrider', N'A young warrior discovers her destiny in a land ruled by dragons and magic.', N'978-1-56619-909-4', CAST(499 AS Decimal(18, 0)), 20, 39, N'bc34707f-2a54-445b-a628-731c3eb104f1_TheSecretDragon.jpg')
+GO
+INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [Stock], [CategoryId], [PhotoPath]) VALUES (9, N'The Last Letter', N'James Whitman', N' A gripping story of love and loss woven through letters found decades apart.', N'978-0-141-03435-8', CAST(349 AS Decimal(18, 0)), 15, 40, N'44d012d3-b6ce-42b7-9eda-af39e35e719b_TheLastLetter.jpg')
+GO
+INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [Stock], [CategoryId], [PhotoPath]) VALUES (10, N' Adventures of Timmy the Turtle', N' Clara Sunbeam', N'Join Timmy on a colorful underwater journey full of fun, friendship, and life lessons.', N'978-0-316-76948-0', CAST(299 AS Decimal(18, 0)), 10, 42, N'28331a76-328f-4bc9-b0ce-f624fef8425b_Turtle.jpg')
+GO
+INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [Stock], [CategoryId], [PhotoPath]) VALUES (15, N'The Alchemist', N'Paulo Coelho', N'A young shepherd''s journey to discover his personal legend becomes a profound quest for meaning and destiny.', N'9780061122415', CAST(349 AS Decimal(18, 0)), 48, 40, N'8aef709b-1ca3-462e-9ed9-c0aaea06308e_TheAlchemist.jpg')
+GO
+INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [Stock], [CategoryId], [PhotoPath]) VALUES (16, N'It Ends With Us', N'Colleen Hoover', N'A compelling romance that explores the complexities of love, abuse, and self-worth.', N'9781501110368', CAST(399 AS Decimal(18, 0)), 20, 44, N'08844669-a8ff-446c-90cf-0e5341818ea0_ItEndsWithUs.jpg')
+GO
+INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [Stock], [CategoryId], [PhotoPath]) VALUES (17, N'Atomic Habits', N'James Clear', N'A proven framework for building good habits and breaking bad ones to transform your life.', N'9780735211292', CAST(499 AS Decimal(18, 0)), 30, 46, N'24675c50-177d-47ec-9c74-234baec8653c_Atomic_Habits.jpg')
+GO
+INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [Stock], [CategoryId], [PhotoPath]) VALUES (18, N'The Power of Habit', N'Charles Duhigg', N'Discover the science behind why habits exist and how they can be changed.', N'9780812981605', CAST(459 AS Decimal(18, 0)), 26, 46, N'ddf9fabf-3a47-4073-ab37-44d6824a3fdf_The Power of Habit.jpg')
+GO
+INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [Stock], [CategoryId], [PhotoPath]) VALUES (19, N'The Innovators', N'Walter Isaacson', N'A history of the digital revolution told through the lives of the innovators who created it.', N'9781476708706', CAST(599 AS Decimal(18, 0)), 0, 41, N'8e27655a-a26e-422e-a078-a5288ba7f83e_The Innovators.jpg')
+GO
+INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [Stock], [CategoryId], [PhotoPath]) VALUES (20, N'Homo Deus', N'Yuval Noah Harari', N'Explores the future of humanity as it moves beyond biology and into artificial intelligence.', N'9780062464316', CAST(499 AS Decimal(18, 0)), 10, 41, N'da840d8e-b0d2-44d1-a74d-e95456de9da6_Homo Deus.jpg')
+GO
+INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [Stock], [CategoryId], [PhotoPath]) VALUES (21, N'Me Before You', N'Jojo Moyes', N'A heartbreaking and uplifting romance between a caregiver and a man left paralyzed after an accident.', N'9780143124542', CAST(389 AS Decimal(18, 0)), 30, 44, N'ba75a6a5-3119-4340-b49b-175e4993d7c4_Me Before You.jpg')
+GO
+INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [Stock], [CategoryId], [PhotoPath]) VALUES (22, N'Pride and Prejudice', N'Jane Austen', N'A timeless classic about love, social class, and the strength of character.', N'9780141439518', CAST(299 AS Decimal(18, 0)), 27, 44, N'9d9ea695-2193-4f52-ab2e-1be237f0eea8_Pride and Prejudice.jpg')
+GO
+INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [Stock], [CategoryId], [PhotoPath]) VALUES (23, N'People We Meet on Vacation', N'Emily Henry', N'A funny and heartfelt romance about opposites who travel together every summer.', N'9781984806758', CAST(399 AS Decimal(18, 0)), 38, 44, N'ed79cf37-a5b4-4218-8901-a85efdb77f41_People We Meet on Vacation.jpg')
+GO
+INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [Stock], [CategoryId], [PhotoPath]) VALUES (24, N'The Girl on the Train', N'Paula Hawkins', N'A psychological thriller about a woman entangled in a missing persons investigation.', N'9781594634024', CAST(449 AS Decimal(18, 0)), 30, 43, N'871a20b5-b5ec-4e06-ad63-925638d1b041_The Girl on the Train.jpg')
+GO
+INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [Stock], [CategoryId], [PhotoPath]) VALUES (25, N'Gone Girl', N'Gillian Flynn', N'A dark, twisted thriller about a marriage gone terribly wrong.', N'9780307588371', CAST(479 AS Decimal(18, 0)), 35, 43, N'302ab5cb-a689-4745-8834-7ffc585b8d98_Gone Girl.jpg')
+GO
+INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [Stock], [CategoryId], [PhotoPath]) VALUES (26, N'The Da Vinci Code', N'Dan Brown', N'A symbologist uncovers a religious mystery hidden in art, history, and secret societies.', N'9780307474278', CAST(499 AS Decimal(18, 0)), 22, 43, N'46b1c758-0ea4-47ec-8390-5c73bca9fed5_The Da Vinci Code.jpg')
+GO
+INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [Stock], [CategoryId], [PhotoPath]) VALUES (27, N'A Game of Thrones', N'George R.R. Martin', N'The first epic fantasy novel in the A Song of Ice and Fire series, filled with political intrigue and power struggles.', N'9780553593716', CAST(599 AS Decimal(18, 0)), 38, 39, N'05db42d5-4c9c-4955-a2d7-8c860df4ba95_A Game of Thrones.jpg')
+GO
+INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [Stock], [CategoryId], [PhotoPath]) VALUES (28, N'The Hobbit', N'J.R.R. Tolkien', N'A reluctant hobbit embarks on a dangerous journey to recover treasure guarded by a dragon.', N'9780547928227', CAST(349 AS Decimal(18, 0)), 32, 39, N'95286cc1-ebab-42e9-b05e-f17aeb0f0099_The Hobbit.jpg')
+GO
+INSERT [dbo].[Books] ([Id], [Title], [Author], [Description], [ISBN], [Price], [Stock], [CategoryId], [PhotoPath]) VALUES (29, N'Harry Potter Series', N'J.K. Rowling', N'A young wizard discovers his magical heritage and battles the dark lord Voldemort over seven books.', N'9780545582888', CAST(2999 AS Decimal(18, 0)), 44, 39, N'93387c8f-3e1d-450a-b97b-eddb7b5e9bd8_Harry Potter Series.jpg')
+GO
+SET IDENTITY_INSERT [dbo].[Books] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Categories] ON 
+GO
+INSERT [dbo].[Categories] ([Id], [Name]) VALUES (39, N'Fantasy')
+GO
+INSERT [dbo].[Categories] ([Id], [Name]) VALUES (40, N'Fiction')
+GO
+INSERT [dbo].[Categories] ([Id], [Name]) VALUES (41, N'Science & Technology')
+GO
+INSERT [dbo].[Categories] ([Id], [Name]) VALUES (42, N'Children''s Books')
+GO
+INSERT [dbo].[Categories] ([Id], [Name]) VALUES (43, N'Mystery & Thriller')
+GO
+INSERT [dbo].[Categories] ([Id], [Name]) VALUES (44, N'Romance')
+GO
+INSERT [dbo].[Categories] ([Id], [Name]) VALUES (45, N'Non-Fiction')
+GO
+INSERT [dbo].[Categories] ([Id], [Name]) VALUES (46, N'Self-Help')
+GO
+SET IDENTITY_INSERT [dbo].[Categories] OFF
+GO
+SET IDENTITY_INSERT [dbo].[DeliveryStatus] ON 
+GO
+INSERT [dbo].[DeliveryStatus] ([Id], [Name]) VALUES (1, N'Pending')
+GO
+INSERT [dbo].[DeliveryStatus] ([Id], [Name]) VALUES (2, N'Shipped')
+GO
+INSERT [dbo].[DeliveryStatus] ([Id], [Name]) VALUES (3, N'Delivered')
+GO
+INSERT [dbo].[DeliveryStatus] ([Id], [Name]) VALUES (4, N'Cancelled')
+GO
+SET IDENTITY_INSERT [dbo].[DeliveryStatus] OFF
+GO
+SET IDENTITY_INSERT [dbo].[PaymentType] ON 
+GO
+INSERT [dbo].[PaymentType] ([Id], [Name]) VALUES (1, N'Cash on Delivery')
+GO
+INSERT [dbo].[PaymentType] ([Id], [Name]) VALUES (2, N'UPI')
+GO
+INSERT [dbo].[PaymentType] ([Id], [Name]) VALUES (3, N'Credit/Debit Card')
+GO
+SET IDENTITY_INSERT [dbo].[PaymentType] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Roles] ON 
+GO
+INSERT [dbo].[Roles] ([Id], [Name]) VALUES (1, N'Admin')
+GO
+INSERT [dbo].[Roles] ([Id], [Name]) VALUES (2, N'User')
+GO
+SET IDENTITY_INSERT [dbo].[Roles] OFF
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UQ__Books__447D36EAF5009A4E]    Script Date: 02-12-2025 18:21:40 ******/
+ALTER TABLE [dbo].[Books] ADD UNIQUE NONCLUSTERED 
+(
+	[ISBN] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UQ__Roles__737584F69F1BCF15]    Script Date: 02-12-2025 18:21:40 ******/
+ALTER TABLE [dbo].[Roles] ADD UNIQUE NONCLUSTERED 
+(
+	[Name] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UQ__Users__536C85E4E8ECAF09]    Script Date: 02-12-2025 18:21:40 ******/
+ALTER TABLE [dbo].[Users] ADD UNIQUE NONCLUSTERED 
+(
+	[Username] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UQ__Users__A9D105347F3AF854]    Script Date: 02-12-2025 18:21:40 ******/
+ALTER TABLE [dbo].[Users] ADD UNIQUE NONCLUSTERED 
+(
+	[Email] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Cart] ADD  DEFAULT (getdate()) FOR [CreatedAt]
+GO
+ALTER TABLE [dbo].[Cart] ADD  DEFAULT (getdate()) FOR [UpdatedAt]
+GO
+ALTER TABLE [dbo].[Users] ADD  DEFAULT ((1)) FOR [IsActive]
+GO
+ALTER TABLE [dbo].[Address]  WITH CHECK ADD FOREIGN KEY([UserId])
+REFERENCES [dbo].[Users] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Books]  WITH CHECK ADD FOREIGN KEY([CategoryId])
+REFERENCES [dbo].[Categories] ([Id])
+GO
+ALTER TABLE [dbo].[CartItem]  WITH CHECK ADD FOREIGN KEY([BookId])
+REFERENCES [dbo].[Books] ([Id])
+GO
+ALTER TABLE [dbo].[CartItem]  WITH CHECK ADD FOREIGN KEY([CartId])
+REFERENCES [dbo].[Cart] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[FavoriteBooks]  WITH CHECK ADD FOREIGN KEY([BookId])
+REFERENCES [dbo].[Books] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[FavoriteBooks]  WITH CHECK ADD FOREIGN KEY([userId])
+REFERENCES [dbo].[Users] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[OrderItems]  WITH CHECK ADD FOREIGN KEY([BookId])
+REFERENCES [dbo].[Books] ([Id])
+GO
+ALTER TABLE [dbo].[OrderItems]  WITH CHECK ADD FOREIGN KEY([OrderId])
+REFERENCES [dbo].[Orders] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Orders]  WITH CHECK ADD FOREIGN KEY([AddressId])
+REFERENCES [dbo].[Address] ([Id])
+GO
+ALTER TABLE [dbo].[Orders]  WITH CHECK ADD FOREIGN KEY([DeliveryStatusId])
+REFERENCES [dbo].[DeliveryStatus] ([Id])
+GO
+ALTER TABLE [dbo].[Orders]  WITH CHECK ADD FOREIGN KEY([PaymentTypeId])
+REFERENCES [dbo].[PaymentType] ([Id])
+GO
+ALTER TABLE [dbo].[Orders]  WITH CHECK ADD FOREIGN KEY([UserId])
+REFERENCES [dbo].[Users] ([Id])
+GO
+ALTER TABLE [dbo].[UserRoles]  WITH CHECK ADD FOREIGN KEY([RoleId])
+REFERENCES [dbo].[Roles] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[UserRoles]  WITH CHECK ADD FOREIGN KEY([UserId])
+REFERENCES [dbo].[Users] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[CartItem]  WITH CHECK ADD CHECK  (([Quantity]>(0)))
+GO
