@@ -472,9 +472,8 @@
                 $('#form2Example2').attr('type', $(this).is(':checked') ? 'text' : 'password');
         });
 
-        //cheking user logged in or not
+        //checking user logged in or not
          const isAuthenticated = @(User.Identity.IsAuthenticated.ToString().ToLower())
-         console.log(isAuthenticated);
 
         //login popup
         function showLoginPopup() {
@@ -495,7 +494,6 @@
                 success:function(data){
                     if (data.success && data.result) {
                         $("#cartItemsCount").text(data.result);
-                        console.log(data.result);
                     }
                 }
             });
@@ -595,7 +593,7 @@
                            window.location.reload();
                            getCartCount();
                        } else {
-                            console.log("Something went wrong while adding to call ");
+                            alert("Unable to add item to cart. Please try again or contact support if the problem persists.");
                        }
                    },
                    error: function () {
