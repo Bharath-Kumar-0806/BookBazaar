@@ -3,9 +3,7 @@
 <div class="container mt-2">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="d-flex align-items-center ms-auto">
-            @* <a  class="btn btn-success me-3">
-                <i class="bi bi-plus-circle me-1"></i> Create User
-            </a> *@
+
             <div class="input-group rounded" style="width:200px;">
                 <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
                 <span class="input-group-text border-0" id="search-addon">
@@ -52,9 +50,6 @@
                                 }
                             </td>
                             <td class="text-end">
-                                @* <a href="@Url.Action("EditUser", "Admin", new { id = user.Id })" class="btn btn-sm btn-outline-primary me-1">
-                                    <i class="fas fa-pen"></i>
-                                </a> *@
                                 <a href="@Url.Action("DeleteUser", "Admin", new { id = user.Id })" class="btn btn-sm btn-outline-danger">
                                     <i class="fas fa-trash"></i>
                                 </a>

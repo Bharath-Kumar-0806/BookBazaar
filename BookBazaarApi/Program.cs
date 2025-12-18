@@ -20,11 +20,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ICategory,CategoryRepository>();
 builder.Services.AddScoped<IBookRepository,BookRepository>();
 builder.Services.AddScoped<IBookService, BookServices>();
-builder.Services.AddScoped<PasswordHasherService>();
 builder.Services.AddScoped<ICartService, CartService>();
-
 builder.Services.AddScoped<IAdminServices,AdminServices>();
 builder.Services.AddScoped<IAdminRepo,AdminRepo>();
+builder.Services.AddScoped<PasswordHasherService>();
 
 var app = builder.Build();
 
