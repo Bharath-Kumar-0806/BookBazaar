@@ -68,10 +68,16 @@ namespace BookBazaar.Controllers
             return View();
         }
 
+        [Route("/Home/Error")]
+        public IActionResult Error()
+        {
+            return View("~/Views/Shared/Error.cshtml");
+        }
+
         //loads nav bar categories
         public async Task<IActionResult> GetCategories()
         {
-            var response = await _apiHelper.ApiCall<List<Category>>("values/getcategories");
+            var response = await _apiHelper.ApiCall<List<Category>>("category/getcategories");
             if (!response.Success)
             {
                 ViewBag.Error = response.Message;

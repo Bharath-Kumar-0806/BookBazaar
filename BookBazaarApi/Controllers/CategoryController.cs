@@ -1,135 +1,96 @@
-﻿using BookBazaarApi.DAL;
-using BookBazaarApi.Helpers;
+﻿using BookBazaarApi.Helpers;
 using BookBazaarApi.Models;
+using BookBazaarApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BookBazaarApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : Controller
+    public class CategoryController : ControllerBase
     {
-        private readonly AppDbContext _dal;
+        private readonly ICategoryService _categoryService;
 
-        public CategoryController(AppDbContext appDbContext)
+        public CategoryController(ICategoryService categoryService)
         {
-            _dal = appDbContext;
+            _categoryService = categoryService;
         }
 
+        [HttpGet("GetCategories")]
+        public async Task<ActionResult<ResponseModel<IEnumerable<Category>>>> GetCategories()
+        {
+            var result = await _categoryService.GetAllCategoriesAsync();
+            var response = new ResponseModel<IEnumerable<Category>>
+            {
+                Success = true,
+                Result = result,
+                Message = "Categories retrieved successfully"
+            };
+            return Ok(response);
+        }
 
         [HttpPost("GetCategoryById")]
-        public ActionResult<ResponseModel<Category>> GetCategoryById(RequestModel data)
+        public async Task<ActionResult<ResponseModel<Category>>> GetCategoryById(RequestModel data)
         {
-            var result = _dal.Categories.FirstOrDefault(c => c.Id == data.Id);
-
+            var result = await _categoryService.GetCategoryByIdAsync(data.Id);
+            if (result == null)
+            {
+                return NotFound(new ResponseModel<Category> { Success = false, Message = "Category not found" });
+            }
             var response = new ResponseModel<Category>
             {
                 Success = true,
                 Result = result,
                 Message = "Category retrieved successfully"
             };
-
-            return Ok(response);
-        }
-
-        [HttpGet("GetCategories")]
-        public ActionResult<ResponseModel<List<Category>>> GetCategories()
-        {
-            var result = _dal.Categories.ToList();
-
-            var response = new ResponseModel<List<Category>>
-            {
-                Success = true,
-                Result = result,
-                Message = "Categories retrieved successfully"
-            };
-
             return Ok(response);
         }
 
         [HttpPost("SaveCategory")]
-        public ActionResult<ResponseModel<List<Category>>> SaveCategory(Category obj)
+        public async Task<ActionResult<ResponseModel<Category>>> SaveCategory(Category obj)
         {
-            try
+            await _categoryService.CreateCategoryAsync(obj);
+            var response = new ResponseModel<Category>
             {
-                _dal.Categories.Add(obj);
-                _dal.SaveChanges();
-
-                var response = new ResponseModel<List<Category>>
-                {
-                    Success = true,
-                    Message = "Category saved successfully."
-                };
-                return Ok(response);
-            }
-            catch
-            {
-                var response = new ResponseModel<List<Category>>
-                {
-                    Success = false,
-                    Message = "Category did not saved."
-                };
-                return Ok(response);
-            }
-
-         
+                Success = true,
+                Message = "Category saved successfully."
+            };
+            return Ok(response);
         }
+
         [HttpPost("EditCategory")]
-        public ActionResult<ResponseModel<List<Category>>> EditCategory(Category obj)
+        public async Task<ActionResult<ResponseModel<Category>>> EditCategory(Category obj)
         {
-            var categoryData = _dal.Categories.FirstOrDefault(c => c.Id == obj.Id);
-            if(categoryData == null)
+            var result = await _categoryService.UpdateCategoryAsync(obj);
+            if (!result)
             {
-                var response = new ResponseModel<List<Category>>
-                {
-                    Success = false,
-                    Message = "Invalid Category"
-                };
-                return Ok(response);
-
+                return NotFound(new ResponseModel<Category> { Success = false, Message = "Category not found" });
             }
-            else
+            var response = new ResponseModel<Category>
             {
-                categoryData.Name = obj.Name;
-                _dal.SaveChanges();
-
-                var response = new ResponseModel<List<Category>>
-                {
-                    Success = true,
-                    Message = "Category edited successfully."
-                };
-                return Ok(response);
-            }
-
+                Success = true,
+                Message = "Category edited successfully."
+            };
+            return Ok(response);
         }
+
         [HttpPost("DeleteCategory")]
-        public ActionResult<ResponseModel<object>> DeleteCategory(RequestModel data)
+        public async Task<ActionResult<ResponseModel<object>>> DeleteCategory(RequestModel data)
         {
-         
-            var categoryData = _dal.Categories.FirstOrDefault(c => c.Id == data.Id);
-            if (categoryData == null)
+            var result = await _categoryService.DeleteCategoryAsync(data.Id);
+            if (!result)
             {
-                    var response = new ResponseModel<object>
-                    {
-                        Success = false,
-                        Message = "Invalid Category."
-                    };
-                    return Ok(response);
+                return NotFound(new ResponseModel<object> { Success = false, Message = "Category not found" });
             }
-            else
+            var response = new ResponseModel<object>
             {
-                    _dal.Categories.Remove(categoryData);
-                    _dal.SaveChanges();
-
-                    var response = new ResponseModel<object>
-                    {
-                        Success = true,
-                        Message = "Category deleted successfully."
-                    };
-                    return Ok(response);
-            }
+                Success = true,
+                Message = "Category deleted successfully."
+            };
+            return Ok(response);
         }
-
     }
 }
+

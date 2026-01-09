@@ -1,4 +1,4 @@
-﻿@using BookBazaar.DTOs
+@using BookBazaar.DTOs
 @model LoginRequestDTO
 
 <div class="d-flex  justify-content-center" style="margin:100px;">
@@ -12,22 +12,19 @@
             </div>
             <small class="text-danger"><span asp-validation-for="Email"></span></small>
             <!-- Password input -->
-            <div data-mdb-input-init class="form-outline mb-2 mt-2">
-                <input asp-for="Password" type="password" id="form2Example2" class="form-control" />
-                <label asp-for="Password" class="form-label" for="form2Example2">Password</label>
+            <div class="input-group mb-2 mt-2">
+                <div data-mdb-input-init class="form-outline flex-grow-1">
+                    <input asp-for="Password" type="password" id="form2Example2" class="form-control" />
+                    <label asp-for="Password" class="form-label" for="form2Example2">Password</label>
+                </div>
+                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                    <i class="fas fa-eye"></i>
+                </button>
             </div>
 
             @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
-            <div class="row mb-4">
-                <div class="col ">
-                    <!-- Checkbox -->
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="showPassword"  />
-                        <label class="form-check-label" for="showPassword">Show Password</label>
-                    </div>
-                </div>
-            </div>
+
 
            
 
@@ -58,3 +55,22 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const togglePassword = document.querySelector('#togglePassword');
+            const password = document.querySelector('#form2Example2');
+
+            if (togglePassword && password) {
+                togglePassword.addEventListener('click', function (e) {
+                    // toggle the type attribute
+                    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                    password.setAttribute('type', type);
+                    // toggle the eye slash icon
+                    this.querySelector('i').classList.toggle('fa-eye-slash');
+                });
+            }
+        });
+    </script>
+}

@@ -41,7 +41,7 @@
                 <div class="container mt-5">
                     <div class="card shadow-sm p-4">
                         <h3 class="mb-4"><i class="bi bi-person-circle me-2"></i>Your Profile</h3>
-                        <form asp-controller="Account" asp-action="UpdateUserProfile" method="post">
+                        <form asp-controller="Account" asp-action="UpdateUserProfile" method="post" id="updateProfile">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Username</label>
@@ -117,6 +117,8 @@
     <script>
         $(document).ready(function(){
 
+
+
             $.ajax({
                 url: "@Url.Action("GetUserDetails", "Account")",
                 method: 'GET',
@@ -152,6 +154,46 @@
                                 }
                             }
                             console.log('Please fix the errors and try again.');
+                        }
+                    },
+                    error: function () {
+                        console.log('Something went wrong. Please try again.');
+                    }
+                });
+            });
+
+            $('#updateProfile').on('submit', function (e) {
+                e.preventDefault();
+
+                var form = $(this);
+
+                $.ajax({
+                    url: '@Url.Action("UpdateUserProfile", "Account")',
+                    method: 'POST',
+                    data: form.serialize(),
+                    success: function (response) {
+                        form.find('.field-validation-error').text('');
+                        if (response.success) {
+                            $.ajax({
+                                url: "@Url.Action("GetUserDetails", "Account")",
+                                method: 'GET',
+                                success: function (data) {
+                                    if (data.success && data.result) {
+                                        $("#UserName").val(data.result.userName);
+                                        $("#Email").val(data.result.email);
+                                        alert('Profile updated successfully!');
+                                    }
+                                }
+                            });
+                        } else {
+                            if (response.errors) {
+                                for (var field in response.errors) {
+                                    form.find(`[data-valmsg-for="${field}"]`).text(response.errors[field][0]);
+                                }
+                            }
+                            if (response.message) {
+                                form.find('span.field-validation-error:not([data-valmsg-for])').text(response.message);
+                            }
                         }
                     },
                     error: function () {
