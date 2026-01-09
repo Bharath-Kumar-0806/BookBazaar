@@ -25,10 +25,10 @@
                     @if (!string.IsNullOrEmpty(ViewBag.Status))
                     {
                         <option value="0" selected="@("" == @ViewBag.Status)">All</option>
-                        <option value="1" selected="@("Pending" == @ViewBag.Status)">Pending</option>
-                        <option value="2" selected="@("Shipped" == @ViewBag.Status)">Shipped</option>
-                        <option value="3" selected="@("Delivered" == @ViewBag.Status)">Delivered</option>
-                        <option value="4" selected="@("Cancelled" == @ViewBag.Status)">Cancelled</option>
+                        <option value="1" selected="@("1" == @ViewBag.Status)">Pending</option>
+                        <option value="2" selected="@("2" == @ViewBag.Status)">Shipped</option>
+                        <option value="3" selected="@("3" == @ViewBag.Status)">Delivered</option>
+                        <option value="4" selected="@("4" == @ViewBag.Status)">Cancelled</option>
                     }
                     else
                     {
